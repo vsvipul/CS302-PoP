@@ -1,0 +1,28 @@
+#lang sicp
+
+(define (make-account balance secret-password)
+  (define (withdraw amount)
+    (if (>= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        "Insufficient funds"))
+  (define (deposit amount)
+    (set! balance (+ balance amount))
+    balance)
+  (define (pass-prompt amount)
+    "Incorrect password")
+  (define (dispatch input-password m)
+    (if (eq? input-password secret-password)
+        (cond ((eq? m 'withdraw) withdraw)
+              ((eq? m 'deposit) deposit)
+              (else (error "Unknown request: MAKE-ACCOUNT"
+                           m)))
+        pass-prompt))
+  dispatch)
+
+;(define acc (make-account 100 'pass123))
+;((acc 'pass123 'withdraw) 40)
+;((acc 'pass123 'deposit) 50)
+;((acc 'pass123 'withdraw) 50)
+;((acc 'pass123 'withdraw) 500)
+;((acc 'pass321 'withdraw) 50)
